@@ -2,7 +2,16 @@
 import { useState } from "react";
 import { useReveal } from "@/hooks/useReveal";
 
-const testimonials = [
+interface Testimonial {
+  initials: string;
+  quote: string;
+  name: string;
+  role: string;
+  industry: string;
+  metric: string;
+}
+
+const testimonials: Testimonial[] = [
   {
     initials: "MR",
     quote: "Online reservations doubled within the first month after launching. The site looks stunning and customers constantly compliment how easy it is to book.",
@@ -59,15 +68,15 @@ export default function Testimonials() {
   return (
     <section
       id="testimonials"
-      className="relative px-20 py-24 overflow-hidden"
+      className="relative px-4 sm:px-8 md:px-14 lg:px-20 py-16 sm:py-20 lg:py-24 overflow-hidden"
       style={{
         background:
           "linear-gradient(160deg, #0e1c35 0%, #0b1628 25%, #0f1e3a 55%, #09121f 100%)",
       }}
     >
-      {/* Gold orb — bottom right */}
+      {/* Gold orb — bottom right (smaller on mobile) */}
       <div
-        className="absolute bottom-0 right-0 w-[700px] h-[500px] pointer-events-none"
+        className="absolute bottom-0 right-0 w-64 h-48 sm:w-[500px] sm:h-96 lg:w-[700px] lg:h-[500px] pointer-events-none"
         style={{
           background:
             "radial-gradient(ellipse 65% 55% at 100% 100%, rgba(201,168,76,0.1) 0%, transparent 65%)",
@@ -76,16 +85,16 @@ export default function Testimonials() {
 
       {/* Cool blue orb — top left */}
       <div
-        className="absolute top-0 left-0 w-[600px] h-[400px] pointer-events-none"
+        className="absolute top-0 left-0 w-48 h-36 sm:w-[400px] sm:h-72 lg:w-[600px] lg:h-[400px] pointer-events-none"
         style={{
           background:
             "radial-gradient(ellipse 60% 50% at 0% 0%, rgba(30,80,160,0.18) 0%, transparent 65%)",
         }}
       />
 
-      {/* Thin top rule */}
+      {/* Thin top rule — inset matches padding */}
       <div
-        className="absolute top-0 left-20 right-20 h-px pointer-events-none"
+        className="absolute top-0 left-4 right-4 sm:left-8 sm:right-8 lg:left-20 lg:right-20 h-px pointer-events-none"
         style={{
           background:
             "linear-gradient(90deg, transparent, rgba(201,168,76,0.25) 30%, rgba(201,168,76,0.25) 70%, transparent)",
@@ -93,13 +102,14 @@ export default function Testimonials() {
       />
 
       <div className="relative z-10">
-        {/* ── Header ── */}
-        <div className="grid lg:grid-cols-2 gap-20 items-center mb-16">
+        {/* ── Header — stacks on mobile, side-by-side on lg ── */}
+        <div className="flex flex-col lg:grid lg:grid-cols-2 lg:gap-20 lg:items-center mb-10 sm:mb-12 lg:mb-16 gap-6">
+
           <div>
-            {/* Giant decorative quote mark */}
+            {/* Giant decorative quote — smaller on mobile */}
             <div
-              className="font-playfair text-[7rem] leading-none mb-[-2rem]
-                select-none pointer-events-none"
+              className="font-playfair leading-none mb-[-1.2rem] sm:mb-[-2rem]
+                select-none pointer-events-none text-[5rem] sm:text-[7rem]"
               style={{
                 background: "linear-gradient(135deg, rgba(201,168,76,0.4), rgba(201,168,76,0.05))",
                 WebkitBackgroundClip: "text",
@@ -109,57 +119,60 @@ export default function Testimonials() {
               &ldquo;
             </div>
             <div className="flex items-center gap-4 mb-4">
-              <div className="w-7 h-px bg-gold" />
+              <div className="w-7 h-px bg-gold flex-shrink-0" />
               <span className="text-gold text-[0.68rem] uppercase tracking-[0.22em] font-medium">
                 Client Results
               </span>
             </div>
             <h2
               className="font-playfair font-bold leading-tight tracking-tight text-white"
-              style={{ fontSize: "clamp(1.9rem, 3.5vw, 3rem)" }}
+              style={{ fontSize: "clamp(1.7rem, 4vw, 3rem)" }}
             >
               What Business Owners{" "}
               <em className="not-italic font-light text-gold">Say About Us</em>
             </h2>
           </div>
 
-          <div className="space-y-6">
-            <p className="text-white/50 text-[0.93rem] leading-relaxed max-w-[420px]">
+          <div className="space-y-5 sm:space-y-6">
+            <p className="text-white/50 text-[0.88rem] sm:text-[0.93rem] leading-relaxed max-w-[420px]">
               Real results from real business owners across every industry we serve.
             </p>
 
             {/* Trust summary bar */}
             <div
-              className="inline-flex items-center gap-4 px-5 py-3 rounded-sm border border-gold/15"
+              className="inline-flex items-center gap-3 sm:gap-4 px-4 sm:px-5 py-3 rounded-sm border border-gold/15"
               style={{ background: "rgba(201,168,76,0.06)" }}
             >
               <div className="text-center">
-                <div className="font-playfair text-xl font-bold text-white">4.9</div>
-                <div className="text-white/40 text-[0.65rem] uppercase tracking-wider">Rating</div>
+                <div className="font-playfair text-lg sm:text-xl font-bold text-white">4.9</div>
+                <div className="text-white/40 text-[0.6rem] uppercase tracking-wider">Rating</div>
               </div>
-              <div className="w-px h-10 bg-white/10" />
+              <div className="w-px h-8 sm:h-10 bg-white/10" />
               <div className="flex gap-0.5">
                 {"★★★★★".split("").map((s, i) => (
-                  <span key={i} className="text-gold text-base">{s}</span>
+                  <span key={i} className="text-gold text-sm sm:text-base">{s}</span>
                 ))}
               </div>
-              <div className="w-px h-10 bg-white/10" />
+              <div className="w-px h-8 sm:h-10 bg-white/10" />
               <div className="text-center">
-                <div className="font-playfair text-xl font-bold text-white">80+</div>
-                <div className="text-white/40 text-[0.65rem] uppercase tracking-wider">Reviews</div>
+                <div className="font-playfair text-lg sm:text-xl font-bold text-white">80+</div>
+                <div className="text-white/40 text-[0.6rem] uppercase tracking-wider">Reviews</div>
               </div>
             </div>
           </div>
         </div>
 
-        {/* ── Cards ── */}
+        {/* ── Cards
+              mobile  : 1 column
+              md      : 2 columns
+              lg      : 3 columns                 ── */}
         <div
           ref={ref}
-          className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5
+          className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5
             reveal ${inView ? "reveal-in" : ""}`}
         >
           {testimonials.map((t) => (
-            <TestiCard key={t.name} {...t} />
+            <TestiCard key={t.name} testimonial={t} />
           ))}
         </div>
       </div>
@@ -167,23 +180,20 @@ export default function Testimonials() {
   );
 }
 
-function TestiCard({
-  initials, quote, name, role, industry, metric,
-}: (typeof testimonials)[0]) {
+function TestiCard({ testimonial }: { testimonial: Testimonial }) {
+  const { initials, quote, name, role, industry, metric } = testimonial;
   const [hovered, setHovered] = useState(false);
 
   return (
     <div
       className={`group relative rounded-sm overflow-hidden cursor-default
-        transition-all duration-350 flex flex-col border
+        transition-all duration-300 flex flex-col border
         ${hovered
-          ? "border-gold/35 -translate-y-2 shadow-[0_32px_72px_rgba(0,0,0,0.55)]"
+          ? "border-gold/35 -translate-y-1 sm:-translate-y-2 shadow-[0_24px_56px_rgba(0,0,0,0.5)]"
           : "border-white/7"
         }`}
       style={{
-        background: hovered
-          ? "rgba(18,30,58,0.95)"
-          : "rgba(13,22,44,0.65)",
+        background: hovered ? "rgba(18,30,58,0.95)" : "rgba(13,22,44,0.65)",
         backdropFilter: "blur(16px)",
       }}
       onMouseEnter={() => setHovered(true)}
@@ -199,7 +209,7 @@ function TestiCard({
         }}
       />
 
-      {/* Ambient glow behind card on hover */}
+      {/* Ambient glow on hover */}
       <div
         className={`absolute inset-0 pointer-events-none transition-opacity duration-500
           ${hovered ? "opacity-100" : "opacity-0"}`}
@@ -209,10 +219,11 @@ function TestiCard({
         }}
       />
 
-      {/* Decorative giant quote — bottom right */}
+      {/* Decorative quote mark — hidden on very small screens to save space */}
       <div
-        className="absolute -bottom-4 -right-2 font-playfair text-[9rem] leading-none
-          select-none pointer-events-none transition-opacity duration-300"
+        className="absolute -bottom-4 -right-2 font-playfair text-[7rem] sm:text-[9rem]
+          leading-none select-none pointer-events-none transition-opacity duration-300
+          hidden xs:block"
         style={{
           background: hovered
             ? "linear-gradient(135deg, rgba(201,168,76,0.12), transparent)"
@@ -225,17 +236,18 @@ function TestiCard({
       </div>
 
       {/* Card content */}
-      <div className="relative z-10 p-7 flex flex-col flex-1 gap-4">
-        {/* Top row — stars + metric badge */}
-        <div className="flex items-center justify-between">
+      <div className="relative z-10 p-5 sm:p-6 lg:p-7 flex flex-col flex-1 gap-3 sm:gap-4">
+
+        {/* Stars + metric badge */}
+        <div className="flex items-center justify-between gap-2">
           <div className="flex gap-0.5">
             {"★★★★★".split("").map((s, i) => (
               <span key={i} className="text-gold text-sm">{s}</span>
             ))}
           </div>
           <span
-            className="text-[0.62rem] uppercase tracking-wider px-2.5 py-1
-              rounded-sm border font-semibold"
+            className="text-[0.58rem] sm:text-[0.62rem] uppercase tracking-wider
+              px-2 sm:px-2.5 py-1 rounded-sm border font-semibold flex-shrink-0"
             style={{
               background: "rgba(201,168,76,0.1)",
               borderColor: "rgba(201,168,76,0.2)",
@@ -247,7 +259,7 @@ function TestiCard({
         </div>
 
         {/* Quote */}
-        <blockquote className="text-white/65 text-[0.86rem] leading-[1.8] italic flex-1">
+        <blockquote className="text-white/65 text-[0.83rem] sm:text-[0.86rem] leading-[1.75] italic flex-1">
           &ldquo;{quote}&rdquo;
         </blockquote>
 
@@ -261,34 +273,32 @@ function TestiCard({
           }}
         />
 
-        {/* Author */}
-        <div className="flex items-center gap-3">
+        {/* Author row */}
+        <div className="flex items-center gap-2.5 sm:gap-3">
           {/* Avatar */}
           <div
-            className="w-10 h-10 rounded-full flex items-center justify-center
-              font-playfair text-[0.85rem] font-bold text-gold flex-shrink-0
-              border transition-all duration-300"
+            className="w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center
+              font-playfair text-[0.8rem] sm:text-[0.85rem] font-bold text-gold
+              flex-shrink-0 border transition-all duration-300"
             style={{
-              background: hovered
-                ? "rgba(201,168,76,0.18)"
-                : "rgba(201,168,76,0.08)",
-              borderColor: hovered
-                ? "rgba(201,168,76,0.4)"
-                : "rgba(201,168,76,0.15)",
+              background: hovered ? "rgba(201,168,76,0.18)" : "rgba(201,168,76,0.08)",
+              borderColor: hovered ? "rgba(201,168,76,0.4)" : "rgba(201,168,76,0.15)",
             }}
           >
             {initials}
           </div>
-          <div className="min-w-0">
-            <div className="text-[0.85rem] font-semibold text-white truncate">
+
+          {/* Name & role */}
+          <div className="min-w-0 flex-1">
+            <div className="text-[0.82rem] sm:text-[0.85rem] font-semibold text-white truncate">
               {name}
             </div>
-            <div className="text-white/40 text-[0.72rem] truncate">{role}</div>
+            <div className="text-white/40 text-[0.68rem] sm:text-[0.72rem] truncate">{role}</div>
           </div>
-          {/* Industry pill */}
-          <span className="ml-auto text-[0.6rem] uppercase tracking-wider
-            text-white/30 border border-white/8 px-2 py-0.5 rounded-sm
-            flex-shrink-0 hidden xl:block">
+
+          {/* Industry pill — only on xl screens */}
+          <span className="hidden xl:block ml-auto text-[0.6rem] uppercase tracking-wider
+            text-white/30 border border-white/8 px-2 py-0.5 rounded-sm flex-shrink-0">
             {industry}
           </span>
         </div>

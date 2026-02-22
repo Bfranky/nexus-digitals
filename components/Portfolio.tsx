@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useReveal } from "@/hooks/useReveal";
 import Image from "next/image";
 
-type Project = {
+interface Project {
   id: number;
   wide: boolean;
   industry: string;
@@ -11,9 +11,9 @@ type Project = {
   desc: string;
   tags: string[];
   category: string;
-  screenshot: string; // real Unsplash image URL
-  url: string;        // fake display URL in browser bar
-};
+  screenshot: string;
+  url: string;
+}
 
 const projects: Project[] = [
   {
@@ -84,14 +84,16 @@ export default function Portfolio() {
   return (
     <section
       id="portfolio"
-      className="relative px-20 py-24 overflow-hidden"
+      className="relative overflow-hidden
+        px-4 sm:px-8 md:px-14 lg:px-20
+        py-16 sm:py-20 lg:py-24"
       style={{
         background:
           "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(201,168,76,0.07) 0%, transparent 70%)," +
           "linear-gradient(180deg, #0d1f3c 0%, #0b1628 40%, #080f1e 100%)",
       }}
     >
-      {/* Subtle grid texture */}
+      {/* Grid texture */}
       <div
         className="absolute inset-0 opacity-20 pointer-events-none"
         style={{
@@ -103,36 +105,41 @@ export default function Portfolio() {
       />
 
       <div className="relative z-10">
+
         {/* ── Header ── */}
-        <div className="flex justify-between items-end mb-12 flex-wrap gap-6">
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-end
+          gap-6 mb-8 sm:mb-10 lg:mb-12">
+
           <div>
             <div className="flex items-center gap-4 mb-4">
-              <div className="w-7 h-px bg-gold" />
+              <div className="w-7 h-px bg-gold flex-shrink-0" />
               <span className="text-gold text-[0.68rem] uppercase tracking-[0.22em] font-medium">
                 Our Work
               </span>
             </div>
             <h2
-              className="font-playfair font-bold leading-tight tracking-tight"
-              style={{ fontSize: "clamp(1.9rem, 3.5vw, 3rem)" }}
+              className="font-playfair font-bold leading-tight tracking-tight text-white"
+              style={{ fontSize: "clamp(1.7rem, 4vw, 3rem)" }}
             >
               Solutions Built for{" "}
               <em className="font-light not-italic text-gold">Real Businesses</em>
             </h2>
           </div>
 
-          {/* Filter tabs */}
-          <div className="flex border border-gold/20 rounded-sm overflow-hidden">
+          {/* Filter tabs — scrollable on mobile */}
+          <div className="flex border border-gold/20 rounded-sm overflow-x-auto
+            max-w-full flex-shrink-0 scrollbar-none">
             {TABS.map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActive(tab)}
-                className={`px-5 py-2.5 text-[0.73rem] uppercase tracking-widest
+                className={`px-3.5 sm:px-5 py-2 sm:py-2.5
+                  text-[0.65rem] sm:text-[0.73rem] uppercase tracking-widest
                   border-r border-gold/20 last:border-r-0 transition-all duration-200
-                  font-outfit cursor-pointer ${
-                    active === tab
-                      ? "bg-gold text-navy font-semibold"
-                      : "bg-transparent text-white/40 hover:text-white hover:bg-white/5"
+                  font-outfit cursor-pointer whitespace-nowrap flex-shrink-0
+                  ${active === tab
+                    ? "bg-gold text-navy font-semibold"
+                    : "bg-transparent text-white/40 hover:text-white hover:bg-white/5"
                   }`}
               >
                 {tab}
@@ -141,10 +148,14 @@ export default function Portfolio() {
           </div>
         </div>
 
-        {/* ── Grid ── */}
+        {/* ── Project Grid ──
+              mobile  : 1 column full-width (all cards)
+              sm      : 2 columns (wide = 2 cols, narrow = 1 col)
+              lg      : 12-col grid (wide = 6, narrow = 4)              */}
         <div
           ref={ref}
-          className={`grid grid-cols-12 gap-6 reveal ${inView ? "reveal-in" : ""}`}
+          className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-4 sm:gap-5 lg:gap-6
+            reveal ${inView ? "reveal-in" : ""}`}
         >
           {filtered.map((p) => (
             <ProjectCard key={p.id} project={p} />
@@ -155,7 +166,7 @@ export default function Portfolio() {
   );
 }
 
-/* ── Browser Mockup with real screenshot ── */
+/* ── Browser Mockup ── */
 function BrowserMock({
   screenshot,
   url,
@@ -168,34 +179,46 @@ function BrowserMock({
   return (
     <div className="w-full h-full flex flex-col bg-[#1a1a2e] rounded-t-sm overflow-hidden">
       {/* Chrome bar */}
-      <div className="flex items-center gap-2 px-3 py-2 bg-[#12122a] border-b border-white/5 flex-shrink-0">
-        {/* Traffic lights */}
-        <span className="w-2.5 h-2.5 rounded-full bg-[#ff5f57] flex-shrink-0" />
-        <span className="w-2.5 h-2.5 rounded-full bg-[#febc2e] flex-shrink-0" />
-        <span className="w-2.5 h-2.5 rounded-full bg-[#28c840] flex-shrink-0" />
+      <div className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 sm:py-2
+        bg-[#12122a] border-b border-white/5 flex-shrink-0">
+        <span className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-[#ff5f57] flex-shrink-0" />
+        <span className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-[#febc2e] flex-shrink-0" />
+        <span className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-[#28c840] flex-shrink-0" />
         {/* Address bar */}
-        <div className="flex-1 mx-3 bg-[#0f0f20] border border-white/8 rounded-sm
-          flex items-center px-2.5 gap-1.5 h-5">
-          <svg className="w-2.5 h-2.5 text-green-400 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-            <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
+        <div className="flex-1 mx-1.5 sm:mx-3 bg-[#0f0f20] border border-white/8
+          rounded-sm flex items-center px-2 gap-1.5 h-4 sm:h-5 min-w-0">
+          <svg
+            className="w-2 h-2 sm:w-2.5 sm:h-2.5 text-green-400 flex-shrink-0"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+          >
+            <path
+              fillRule="evenodd"
+              d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
+              clipRule="evenodd"
+            />
           </svg>
-          <span className="text-white/40 text-[0.58rem] tracking-wide truncate">{url}</span>
+          <span className="text-white/40 text-[0.5rem] sm:text-[0.58rem] tracking-wide truncate">
+            {url}
+          </span>
         </div>
       </div>
 
       {/* Screenshot */}
-      <div className={`relative w-full flex-1 overflow-hidden ${tall ? "min-h-[220px]" : "min-h-[170px]"}`}>
+      <div
+        className={`relative w-full flex-1 overflow-hidden
+          ${tall ? "min-h-[160px] sm:min-h-[200px] lg:min-h-[220px]"
+                 : "min-h-[130px] sm:min-h-[155px] lg:min-h-[170px]"}`}
+      >
         <Image
           src={screenshot}
           alt={url}
           fill
-          className="object-cover object-top transition-transform duration-700
-            group-hover:scale-105"
-          sizes="(max-width: 768px) 100vw, 50vw"
+          className="object-cover object-top transition-transform duration-700 group-hover:scale-105"
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 40vw"
           unoptimized
         />
-        {/* Subtle gradient fade at bottom */}
-        <div className="absolute bottom-0 left-0 right-0 h-12
+        <div className="absolute bottom-0 left-0 right-0 h-10 sm:h-12
           bg-gradient-to-t from-[#0b1628]/60 to-transparent pointer-events-none" />
       </div>
     </div>
@@ -208,60 +231,60 @@ function ProjectCard({ project: p }: { project: Project }) {
 
   return (
     <div
-      className={`group relative rounded-sm overflow-hidden transition-all duration-350
+      className={`group relative rounded-sm overflow-hidden transition-all duration-300
         border cursor-default flex flex-col
-        ${p.wide ? "col-span-12 md:col-span-6" : "col-span-12 md:col-span-4"}
-        ${
-          hovered
-            ? "border-gold/50 -translate-y-2 shadow-[0_32px_72px_rgba(0,0,0,0.55)]"
-            : "border-white/8 bg-[rgba(13,24,48,0.7)]"
+        col-span-1
+        ${p.wide ? "sm:col-span-2 lg:col-span-6" : "sm:col-span-1 lg:col-span-4"}
+        ${hovered
+          ? "border-gold/50 -translate-y-1 sm:-translate-y-2 shadow-[0_24px_60px_rgba(0,0,0,0.55)]"
+          : "border-white/8"
         }`}
       style={{
-        background: hovered
-          ? "rgba(17,32,64,0.9)"
-          : "rgba(13,24,48,0.7)",
+        background: hovered ? "rgba(17,32,64,0.9)" : "rgba(13,24,48,0.7)",
         backdropFilter: "blur(12px)",
       }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
-      {/* Top gold accent line on hover */}
+      {/* Top gold line on hover */}
       <div
-        className={`absolute top-0 left-0 right-0 h-0.5 bg-gold transition-opacity duration-300
+        className={`absolute top-0 left-0 right-0 h-0.5 bg-gold
+          transition-opacity duration-300
           ${hovered ? "opacity-100" : "opacity-0"}`}
       />
 
       {/* Browser mockup */}
-      <div className={p.wide ? "h-64" : "h-52"}>
-        <BrowserMock
-          screenshot={p.screenshot}
-          url={p.url}
-          tall={p.wide}
-        />
+      <div className={p.wide ? "h-52 sm:h-60 lg:h-64" : "h-44 sm:h-48 lg:h-52"}>
+        <BrowserMock screenshot={p.screenshot} url={p.url} tall={p.wide} />
       </div>
 
       {/* Card body */}
-      <div className="p-6 flex flex-col gap-3 flex-1">
-        <div className="flex items-center gap-2 text-[0.67rem] uppercase
-          tracking-[0.15em] text-gold">
-          <span className="w-1 h-1 rounded-full bg-gold inline-block" />
+      <div className="p-4 sm:p-5 lg:p-6 flex flex-col gap-2.5 sm:gap-3 flex-1">
+        {/* Industry label */}
+        <div className="flex items-center gap-2 text-[0.63rem] sm:text-[0.67rem]
+          uppercase tracking-[0.15em] text-gold">
+          <span className="w-1 h-1 rounded-full bg-gold inline-block flex-shrink-0" />
           {p.industry}
         </div>
 
-        <h3 className="font-playfair text-[1rem] font-semibold text-white leading-snug">
+        {/* Title */}
+        <h3 className="font-playfair text-[0.95rem] sm:text-[1rem] font-semibold
+          text-white leading-snug">
           {p.title}
         </h3>
 
-        <p className="text-white/45 text-[0.81rem] leading-relaxed flex-1">
+        {/* Description */}
+        <p className="text-white/45 text-[0.78rem] sm:text-[0.81rem] leading-relaxed flex-1">
           {p.desc}
         </p>
 
-        <div className="flex flex-wrap gap-1.5 pt-1">
+        {/* Tags */}
+        <div className="flex flex-wrap gap-1 sm:gap-1.5 pt-0.5 sm:pt-1">
           {p.tags.map((t) => (
             <span
               key={t}
-              className="text-[0.65rem] px-2.5 py-0.5 rounded-sm
-                border border-gold/15 text-gold/60 bg-gold/5"
+              className="text-[0.6rem] sm:text-[0.65rem] px-2 sm:px-2.5 py-0.5
+                rounded-sm border border-gold/15 text-gold/60 bg-gold/5"
             >
               {t}
             </span>
