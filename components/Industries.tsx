@@ -2,7 +2,16 @@
 import { useState } from "react";
 import { useReveal } from "@/hooks/useReveal";
 
-const industries = [
+interface Industry {
+  emoji: string;
+  title: string;
+  desc: string;
+  features: string[];
+  accent: string;
+  glow: string;
+}
+
+const industries: Industry[] = [
   {
     emoji: "🍽️", title: "Restaurants & Food",
     desc: "Drive more reservations and online orders with menus, booking systems, and stunning food photography layouts.",
@@ -53,15 +62,18 @@ export default function Industries() {
   return (
     <section
       id="industries"
-      className="relative px-20 py-24 overflow-hidden"
+      className="relative overflow-hidden
+        px-4 sm:px-8 md:px-14 lg:px-20
+        py-16 sm:py-20 lg:py-24"
       style={{
         background:
           "linear-gradient(180deg, #080f1e 0%, #0b1628 30%, #0d1c38 70%, #0a1425 100%)",
       }}
     >
-      {/* Gold radial glow — top centre */}
+      {/* Gold radial glow — top centre, scaled down on mobile */}
       <div
-        className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[500px]
+        className="absolute top-0 left-1/2 -translate-x-1/2
+          w-[320px] h-[200px] sm:w-[600px] sm:h-[350px] lg:w-[900px] lg:h-[500px]
           pointer-events-none"
         style={{
           background:
@@ -69,7 +81,7 @@ export default function Industries() {
         }}
       />
 
-      {/* Noise texture overlay */}
+      {/* Noise texture */}
       <div
         className="absolute inset-0 opacity-[0.025] pointer-events-none"
         style={{
@@ -80,9 +92,9 @@ export default function Industries() {
         }}
       />
 
-      {/* Faint horizontal rule at top */}
+      {/* Top rule — inset matches padding */}
       <div
-        className="absolute top-0 left-20 right-20 h-px"
+        className="absolute top-0 left-4 right-4 sm:left-8 sm:right-8 lg:left-20 lg:right-20 h-px"
         style={{
           background:
             "linear-gradient(90deg, transparent, rgba(201,168,76,0.3) 30%, rgba(201,168,76,0.3) 70%, transparent)",
@@ -90,37 +102,41 @@ export default function Industries() {
       />
 
       <div className="relative z-10">
-        {/* Header */}
-        <div className="flex justify-between items-end mb-14 flex-wrap gap-6">
-          <div>
+        {/* Header — stacks on mobile, side-by-side on lg */}
+        <div className="flex flex-col lg:flex-row lg:justify-between lg:items-end
+          gap-5 lg:gap-12 mb-10 sm:mb-12 lg:mb-14">
+          <div className="flex-shrink-0">
             <div className="flex items-center gap-4 mb-4">
-              <div className="w-7 h-px bg-gold" />
+              <div className="w-7 h-px bg-gold flex-shrink-0" />
               <span className="text-gold text-[0.68rem] uppercase tracking-[0.22em] font-medium">
                 Industries We Serve
               </span>
             </div>
             <h2
               className="font-playfair font-bold leading-tight tracking-tight text-white"
-              style={{ fontSize: "clamp(1.9rem, 3.5vw, 3rem)" }}
+              style={{ fontSize: "clamp(1.7rem, 4vw, 3rem)" }}
             >
               Built for Every{" "}
               <em className="not-italic font-light text-gold">Type of Business</em>
             </h2>
           </div>
-          <p className="text-white/45 text-[0.93rem] leading-relaxed max-w-[420px]">
+          <p className="text-white/45 text-[0.88rem] sm:text-[0.93rem] leading-relaxed lg:max-w-[420px]">
             Every industry has unique requirements. We know yours — and build
             specifically for it.
           </p>
         </div>
 
-        {/* Cards */}
+        {/* Cards
+            mobile  : 1 column
+            md      : 2 columns
+            lg      : 3 columns              */}
         <div
           ref={ref}
-          className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5
+          className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5
             reveal ${inView ? "reveal-in" : ""}`}
         >
           {industries.map((ind) => (
-            <IndustryCard key={ind.title} {...ind} />
+            <IndustryCard key={ind.title} industry={ind} />
           ))}
         </div>
       </div>
@@ -128,36 +144,33 @@ export default function Industries() {
   );
 }
 
-function IndustryCard({
-  emoji, title, desc, features, accent, glow,
-}: (typeof industries)[0]) {
+function IndustryCard({ industry }: { industry: Industry }) {
+  const { emoji, title, desc, features, accent, glow } = industry;
   const [hovered, setHovered] = useState(false);
 
   return (
     <div
       className={`group relative rounded-sm overflow-hidden cursor-default
-        transition-all duration-350 border
+        transition-all duration-300 border
         ${hovered
-          ? "border-gold/30 -translate-y-1.5 shadow-[0_28px_60px_rgba(0,0,0,0.5)]"
+          ? "border-gold/30 -translate-y-1 sm:-translate-y-1.5 shadow-[0_24px_56px_rgba(0,0,0,0.5)]"
           : "border-white/7"
         }`}
       style={{
-        background: hovered
-          ? "rgba(18,30,55,0.95)"
-          : "rgba(13,22,42,0.7)",
+        background: hovered ? "rgba(18,30,55,0.95)" : "rgba(13,22,42,0.7)",
         backdropFilter: "blur(12px)",
       }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
-      {/* Per-industry colour bloom in the top-left corner */}
+      {/* Per-industry colour bloom — top-left corner */}
       <div
-        className={`absolute top-0 left-0 w-40 h-40 pointer-events-none
+        className={`absolute top-0 left-0 w-36 h-36 sm:w-40 sm:h-40 pointer-events-none
           transition-opacity duration-500 bg-gradient-to-br ${accent}
           ${hovered ? "opacity-100" : "opacity-50"}`}
       />
 
-      {/* Top gold shimmer on hover */}
+      {/* Gold shimmer — top edge on hover */}
       <div
         className={`absolute top-0 left-0 right-0 h-0.5 transition-opacity duration-300
           ${hovered ? "opacity-100" : "opacity-0"}`}
@@ -167,7 +180,7 @@ function IndustryCard({
         }}
       />
 
-      {/* Left accent bar — slides up */}
+      {/* Gold left bar — slides up on hover */}
       <div
         className={`absolute left-0 top-0 bottom-0 w-[3px] bg-gold
           transition-transform duration-500 origin-bottom
@@ -175,11 +188,13 @@ function IndustryCard({
       />
 
       {/* Card body */}
-      <div className="relative z-10 p-8">
-        {/* Emoji with subtle glow bubble */}
+      <div className="relative z-10 p-6 sm:p-7 lg:p-8">
+
+        {/* Emoji icon box */}
         <div
-          className="w-14 h-14 rounded-sm flex items-center justify-center
-            text-3xl mb-6 border border-white/8 transition-all duration-300"
+          className="w-12 h-12 sm:w-14 sm:h-14 rounded-sm flex items-center
+            justify-center text-2xl sm:text-3xl mb-5 sm:mb-6
+            border border-white/8 transition-all duration-300"
           style={{
             background: hovered ? glow : "rgba(255,255,255,0.04)",
             boxShadow: hovered ? `0 0 24px ${glow}` : "none",
@@ -188,21 +203,45 @@ function IndustryCard({
           {emoji}
         </div>
 
-        <h3 className="font-playfair text-[1.05rem] font-bold text-white mb-2.5
-          group-hover:text-gold transition-colors duration-300">
+        {/* Title */}
+        <h3
+          className="font-playfair text-[1rem] sm:text-[1.05rem] font-bold
+            text-white mb-2 sm:mb-2.5
+            group-hover:text-gold transition-colors duration-300"
+        >
           {title}
         </h3>
 
-        <p className="text-white/45 text-[0.82rem] leading-relaxed mb-5">{desc}</p>
+        {/* Description */}
+        <p className="text-white/45 text-[0.8rem] sm:text-[0.82rem] leading-relaxed mb-4 sm:mb-5">
+          {desc}
+        </p>
 
-        <ul className="space-y-2">
+        {/* Feature list */}
+        <ul className="space-y-1.5 sm:space-y-2">
           {features.map((f) => (
-            <li key={f} className="flex items-center gap-2.5 text-[0.77rem] text-white/50">
-              <span className="w-4 h-4 rounded-sm bg-gold/15 border border-gold/25
-                flex items-center justify-center flex-shrink-0">
-                <svg className="w-2.5 h-2.5 text-gold" viewBox="0 0 10 10" fill="none">
-                  <path d="M1.5 5l2.5 2.5 4.5-5" stroke="currentColor" strokeWidth="1.5"
-                    strokeLinecap="round" strokeLinejoin="round"/>
+            <li
+              key={f}
+              className="flex items-center gap-2 sm:gap-2.5
+                text-[0.73rem] sm:text-[0.77rem] text-white/50"
+            >
+              <span
+                className="w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-sm
+                  bg-gold/15 border border-gold/25
+                  flex items-center justify-center flex-shrink-0"
+              >
+                <svg
+                  className="w-2 h-2 sm:w-2.5 sm:h-2.5 text-gold"
+                  viewBox="0 0 10 10"
+                  fill="none"
+                >
+                  <path
+                    d="M1.5 5l2.5 2.5 4.5-5"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
                 </svg>
               </span>
               {f}
